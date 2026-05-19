@@ -5,71 +5,147 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Instalacija prezentacije</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      /* Primjena čistog fonta */
+    }
+
+    body {
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      font-family: Arial, sans-serif;
-      color: white;
+      /* Svjetlija, svježija pozadina (blagi gradijent plave/bijele) */
+      background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+      overflow: hidden;
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 30px;
-      border-radius: 18px;
-      width: 320px;
+      /* Čist, prozračan "stakleni" kontejner na svijetloj podlozi */
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 50px 40px;
+      border-radius: 30px;
+      /* Mekši rubovi */
+      width: 380px;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(8px);
+      /* Suptilna, meka sjena */
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
     }
 
     h1 {
-      margin-bottom: 20px;
-      font-size: 24px;
+      margin-bottom: 30px;
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a202c;
+      /* Tamno siva za bolju čitljivost */
+      letter-spacing: -0.5px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      margin-bottom: 15px;
+      padding: 16px 20px;
+      border: 2px solid #e2e8f0;
+      /* Svijetlo sivi obrub */
+      border-radius: 15px;
       font-size: 16px;
-      box-sizing: border-box;
+      background-color: #ffffff;
+      color: #1a202c;
+      outline: none;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    /* Fokus na unos: plavi obrub i blagi sjaj */
+    input:focus {
+      border-color: #3182ce;
+      box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.1);
+    }
+
+    input::placeholder {
+      color: #a0aec0;
     }
 
     button {
       width: 100%;
-      padding: 12px;
+      padding: 16px;
       border: none;
-      border-radius: 10px;
-      background: #22c55e;
+      border-radius: 15px;
+      /* Mekša, "digitalna" plava boja */
+      background: #3182ce;
       color: white;
       font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(49, 130, 206, 0.2);
+      transition: all 0.3s ease;
     }
 
     button:hover {
-      background: #16a34a;
+      background: #2b6cb0;
+      box-shadow: 0 6px 15px rgba(49, 130, 206, 0.3);
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     #message {
-      margin-top: 18px;
-      font-size: 16px;
-      font-weight: bold;
+      margin-top: 25px;
+      font-size: 15px;
+      font-weight: 500;
+      min-height: 22px;
+      transition: all 0.3s ease;
     }
 
+    /* Čiste, jasne boje za poruke */
     .error {
-      color: #f87171;
+      color: #e53e3e;
+      /* Crvena za grešku */
+      animation: shake 0.4s ease;
     }
 
     .success {
-      color: #4ade80;
+      color: #38a169;
+      /* Zelena za uspjeh */
+    }
+
+    /* Animacija trešenja za pogrešnu šifru */
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-6px);
+      }
+
+      75% {
+        transform: translateX(6px);
+      }
     }
   </style>
 </head>
@@ -78,22 +154,35 @@
   <div class="container">
     <h1>Pokreni instalaciju</h1>
 
-    <input type="password" id="password" placeholder="Unesi šifru" />
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Unesi šifru" />
+    </div>
     <button onclick="checkPassword()">Pošalji</button>
 
     <div id="message"></div>
   </div>
 
   <script>
+    // Omogućava slanje pritiskom na dugme "Enter" na tastaturi
+    document.getElementById('password').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        checkPassword();
+      }
+    });
+
     function checkPassword() {
-      const password = document.getElementById('password').value;
+      const passwordInput = document.getElementById('password');
+      const password = passwordInput.value;
       const message = document.getElementById('message');
 
+      // Resetovanje klase i animacije
+      message.className = '';
+      void message.offsetWidth;
+
       if (password === '43201') {
-        message.textContent = 'Instalacija prezentacije počinje';
+        message.textContent = '✓ Instalacija prezentacije počinje';
         message.className = 'success';
 
-        // Automatsko preuzimanje PPT dokumenta
         const link = document.createElement('a');
         link.href = 'Checklist 4.pdf';
         link.download = 'Checklist 4.pdf';
@@ -101,8 +190,9 @@
         link.click();
         document.body.removeChild(link);
       } else {
-        message.textContent = 'Pogrešna šifra!';
+        message.textContent = '✕ Pogrešna šifra!';
         message.className = 'error';
+        passwordInput.focus();
       }
     }
   </script>
