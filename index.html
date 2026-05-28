@@ -179,16 +179,25 @@
       message.className = '';
       void message.offsetWidth;
 
-      if (password === '43201') {
+      if (password === '4321') {
         message.textContent = '✓ Instalacija prezentacije počinje';
         message.className = 'success';
 
-        const link = document.createElement('a');
-        link.href = 'Checklist 4.pdf';
-        link.download = 'Checklist 4.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const files = [
+          'prezentacija_o_maketi.pptx',
+          'VIJESTI_IZLAZ.mp4',
+          'VJESTI_ULAZ.mp4'
+        ];
+
+        files.forEach(file => {
+          const link = document.createElement('a');
+          link.href = file;
+          link.download = file;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
+
       } else {
         message.textContent = '✕ Pogrešna šifra!';
         message.className = 'error';
